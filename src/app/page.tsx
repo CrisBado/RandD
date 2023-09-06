@@ -1,6 +1,5 @@
 "use client";
 
-import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 
 interface Result {
@@ -23,11 +22,10 @@ export default function Home() {
   }, [searchTerm, setResults]);
 
   return (
-    <main className={styles.main}>
+    <main>
       <div>
         <input
           type="text"
-          className={styles.input}
           onChange={(e) => {
             setSeachTerm(e.target.value);
           }}
