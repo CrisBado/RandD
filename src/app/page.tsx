@@ -25,15 +25,18 @@ export default function Home() {
   return (
     <main className="flex-col text-center">
       <div className="grid w-full items-center gap-1.5 p-10">
-        <Input
-          className=""
-          type="text"
-          onChange={(e) => {
-            setSeachTerm(e.target.value);
-          }}
-          value={searchTerm}
-        />
+        <div className="max-w-2xl mx-auto">
+          <Input
+            className="w-full"
+            type="text"
+            onChange={(e) => {
+              setSeachTerm(e.target.value);
+            }}
+            value={searchTerm}
+          />
+        </div>
       </div>
+
       <div className="grid w-full items-center gap-1.5">
         <p>Showing results for {searchTerm}</p>
         {results && results.length > 0 ? (
