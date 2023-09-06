@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
 
 interface Result {
   id: string;
@@ -22,18 +23,19 @@ export default function Home() {
   }, [searchTerm, setResults]);
 
   return (
-    <main>
-      <div>
-        <input
+    <main className="flex-col text-center">
+      <div className="grid w-full items-center gap-1.5 p-10">
+        <Input
+          className=""
           type="text"
           onChange={(e) => {
             setSeachTerm(e.target.value);
           }}
           value={searchTerm}
         />
-        <p>Showing results for {searchTerm}</p>
       </div>
-      <div>
+      <div className="grid w-full items-center gap-1.5">
+        <p>Showing results for {searchTerm}</p>
         {results && results.length > 0 ? (
           <ul>
             {results.map((result) => (
