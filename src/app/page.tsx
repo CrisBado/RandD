@@ -14,12 +14,25 @@ export default function Home() {
   const [results, setResults] = useState<Result[]>([]);
 
   useEffect(() => {
-    console.log("searchTerm", searchTerm);
-    fetch(`/api/search?term=${searchTerm}`).then((res) => {
-      res.json().then((data) => {
-        setResults(data);
-      });
-    });
+    let debounceTimer: NodeJS.Timeout;
+
+    const debounceSearch = () => {
+      clearTimeout(debounceTimer);
+
+      debounceTimer = setTimeout(() => {
+        console.log("searchTerm", searchTerm);
+        fetch(`/api/search?term=${searchTerm}`).then((res) => {
+          res.json().then((data) => {
+            setResults(data);
+          });
+        });
+      }, 500);
+    };
+    debounceSearch();
+
+    return () => {
+      clearTimeout(debounceTimer);
+    };
   }, [searchTerm, setResults]);
 
   return (
