@@ -2,6 +2,7 @@
 
 import styles from "./page.module.css";
 import { useEffect, useState } from "react";
+import useDebounce from "./hooks/useDebounce";
 
 interface Result {
   id: string;
@@ -13,27 +14,20 @@ export default function Home() {
   const [searchTerm, setSeachTerm] = useState("");
   const [results, setResults] = useState<Result[]>([]);
 
+  const debounceDelay = 500;
+  const debouncedSearchTerm = useDebounce(searchTerm, debounceDelay);
+
   useEffect(() => {
-    let debounceTimer: NodeJS.Timeout;
-
-    const debounceSearch = () => {
-      clearTimeout(debounceTimer);
-
-      debounceTimer = setTimeout(() => {
-        console.log("searchTerm", searchTerm);
-        fetch(`/api/search?term=${searchTerm}`).then((res) => {
-          res.json().then((data) => {
-            setResults(data);
-          });
+    if (debouncedSearchTerm) {
+      fetch(`/api/search?term=${debouncedSearchTerm}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setResults(data);
         });
-      }, 500);
-    };
-    debounceSearch();
-
-    return () => {
-      clearTimeout(debounceTimer);
-    };
-  }, [searchTerm, setResults]);
+    } else {
+      setResults([]);
+    }
+  }, [debouncedSearchTerm]);
 
   return (
     <main className={styles.main}>
