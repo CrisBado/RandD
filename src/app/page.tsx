@@ -1,8 +1,8 @@
 "use client";
 
-import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 import useDebounce from "./hooks/useDebounce";
+import { Input } from "@/components/ui/input";
 
 interface Result {
   id: string;
@@ -30,19 +30,22 @@ export default function Home() {
   }, [debouncedSearchTerm]);
 
   return (
-    <main className={styles.main}>
-      <div>
-        <input
-          type="text"
-          className={styles.input}
-          onChange={(e) => {
-            setSeachTerm(e.target.value);
-          }}
-          value={searchTerm}
-        />
-        <p>Showing results for {searchTerm}</p>
+    <main className="flex-col text-center">
+      <div className="grid w-full items-center gap-1.5 p-10">
+        <div className="max-w-2xl mx-auto">
+          <Input
+            className="w-full"
+            type="text"
+            onChange={(e) => {
+              setSeachTerm(e.target.value);
+            }}
+            value={searchTerm}
+          />
+        </div>
       </div>
-      <div>
+
+      <div className="grid w-full items-center gap-1.5">
+        <p>Showing results for {searchTerm}</p>
         {results && results.length > 0 ? (
           <ul>
             {results.map((result) => (
