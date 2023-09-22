@@ -2,16 +2,28 @@
 
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Buttons";
+import Data from "./Data";
 interface Result {
   id: string;
   term: string;
   description: string;
+  department: string;
 }
 
 export default function Home() {
   const [searchTerm, setSeachTerm] = useState("");
   const [results, setResults] = useState<Result[]>([]);
+  const [ item, setItems] = useState(Data);
+  
+
+  const myDepartment = ["tech", "product", "sales"];
+
+  const filterDepartment = (department: string) => {
+    setItems(Data.filter((item) => item.department === department));
+    
+  }
 
   useEffect(() => {
     console.log("searchTerm", searchTerm);
@@ -39,6 +51,13 @@ export default function Home() {
 
       <div className="grid w-full items-center gap-1.5">
         <p>Showing results for {searchTerm}</p>
+
+        <Button myDepartment={myDepartment}
+        filterDepartment ={filterDepartment}
+        setItems={setItems}/>
+
+        <Card item={item}/>
+
         {results && results.length > 0 ? (
           <ul>
             {results.map((result) => (
@@ -47,7 +66,9 @@ export default function Home() {
                 {result.description}
               </li>
             ))}
+           
           </ul>
+          
         ) : (
           <p>No results found</p>
         )}
