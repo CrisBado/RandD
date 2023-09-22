@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import useDebounce from "./hooks/useDebounce";
 import { Input } from "@/components/ui/input";
 
 interface Result {
@@ -13,14 +14,20 @@ export default function Home() {
   const [searchTerm, setSeachTerm] = useState("");
   const [results, setResults] = useState<Result[]>([]);
 
+  const debounceDelay = 500;
+  const debouncedSearchTerm = useDebounce(searchTerm, debounceDelay);
+
   useEffect(() => {
-    console.log("searchTerm", searchTerm);
-    fetch(`/api/search?term=${searchTerm}`).then((res) => {
-      res.json().then((data) => {
-        setResults(data);
-      });
-    });
-  }, [searchTerm, setResults]);
+    if (debouncedSearchTerm) {
+      fetch(`/api/search?term=${debouncedSearchTerm}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setResults(data);
+        });
+    } else {
+      setResults([]);
+    }
+  }, [debouncedSearchTerm]);
 
   return (
     <main className="flex-col text-center">
