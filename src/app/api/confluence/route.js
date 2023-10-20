@@ -1,30 +1,26 @@
-import axios from "axios";
-
 import { NextResponse } from "next/server";
 
 export async function GET(req, res) {
   try {
-    // Replace 'YOUR_API_TOKEN' with your actual API token
     const apiToken = process.env.CONFLUENCE_API_TOKEN;
     const email = process.env.CONFLUENCE_EMAIL;
 
-    // Construct the Confluence API URL
     const confluenceApiUrl = `https://15gifts.atlassian.net/wiki/rest/api/content/3643572235?expand=body.storage`;
 
-    // Make the API request to Confluence with the API token
-    const response = await axios.get(confluenceApiUrl, {
+    const authString = `${email}:${apiToken}`;
+    const encodedAuthString = btoa(authString);
+
+    const response = await fetch(confluenceApiUrl, {
       headers: {
         "Content-Type": "application/json",
-        username: email,
-        password: apiToken,
-      },
-      auth: {
-        username: email,
-        password: apiToken,
+        Authorization: `Basic ${encodedAuthString}`,
       },
     });
+
     // Extract the HTML content from the response
-    const pageContent = response.data.body.storage.value;
+    const data = await response.json();
+    const pageContent = data.body.storage.value;
+    console.log(pageContent);
 
     // Find all <h3> tags and keep only the text inside
     const h3TextArray = pageContent.match(/<h3[^>]*>[\s\S]*?<\/h3>/g);
@@ -41,13 +37,9 @@ export async function GET(req, res) {
 
     const cleanedTextObjects = cleanedText.map((text) => ({ text }));
 
-    // Send the modified Confluence API response back to the client
-    console.log(cleanedText);
-
     return NextResponse.json(cleanedTextObjects);
   } catch (error) {
-    // Handle errors as needed
     console.error("Error:", error);
-    return NextResponse.json({ message: "no" });
+    return NextResponse.status(500).json({ error: error.message });
   }
 }
