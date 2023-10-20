@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import useDebounce from "./hooks/useDebounce";
+import useDebounce from "../hooks/useDebounce";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 interface Result {
   id: string;
@@ -31,6 +32,7 @@ export default function Home() {
 
   return (
     <main className="flex-col text-center">
+      <Link href="/confluence">Confluence Data here</Link>
       <div className="grid w-full items-center gap-1.5 p-10">
         <div className="max-w-2xl mx-auto">
           <Input
