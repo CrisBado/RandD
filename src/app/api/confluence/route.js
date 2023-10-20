@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { v4 as uuidv4 } from "uuid";
 
 export async function GET(req, res) {
   try {
@@ -20,7 +21,6 @@ export async function GET(req, res) {
     // Extract the HTML content from the response
     const data = await response.json();
     const pageContent = data.body.storage.value;
-    console.log(pageContent);
 
     // Find all <h3> tags and keep only the text inside
     const h3TextArray = pageContent.match(/<h3[^>]*>[\s\S]*?<\/h3>/g);
@@ -35,7 +35,10 @@ export async function GET(req, res) {
       text.replace(/&ldquo;|&rdquo;/g, "")
     );
 
-    const cleanedTextObjects = cleanedText.map((text) => ({ text }));
+    const cleanedTextObjects = cleanedText.map((text) => ({
+      id: uuidv4(),
+      text,
+    }));
 
     return NextResponse.json(cleanedTextObjects);
   } catch (error) {

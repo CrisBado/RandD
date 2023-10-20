@@ -32,9 +32,7 @@ export default function Home() {
 
   return (
     <main className="flex-col text-center">
-      <Link href="/confluence">
-        <button>Confluence Data here</button>
-      </Link>
+      <Link href="/confluence">Confluence Data here</Link>
       <div className="grid w-full items-center gap-1.5 p-10">
         <div className="max-w-2xl mx-auto">
           <Input
@@ -49,6 +47,7 @@ export default function Home() {
       </div>
 
       <div className="grid w-full items-center gap-1.5">
+        <p>Showing results for {searchTerm}</p>
         {results && results.length > 0 ? (
           <ul>
             {results.map((result) => (
