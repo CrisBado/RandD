@@ -47,7 +47,8 @@ export default function Home() {
       </div>
 
       <div className="grid w-full items-center gap-1.5">
-        <p>Showing results for {searchTerm}</p>
+        {searchTerm && <p>Showing results for {searchTerm}</p>}
+
         {results && results.length > 0 ? (
           <ul>
             {results.map((result) => (

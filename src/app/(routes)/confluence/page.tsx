@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 
 interface ConfluenceResult {
   id: string;
-  text: string;
+  title: string;
+  innerHTML: string;
 }
 
 function ConfluencePage() {
@@ -35,20 +36,41 @@ function ConfluencePage() {
   console.log("confluenceData", confluenceData);
 
   return (
-    <div>
-      {confluenceData ? (
-        <ul>
-          {confluenceData.map((result) => (
-            <li key={result.id}>
-              <h3 className="text-lg font-normal text-gray-800">
-                {result.text}
-              </h3>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No results found</p>
-      )}
+    <div className="flex">
+      <div>
+        {confluenceData ? (
+          <ul className="space-y-4">
+            {confluenceData.map((result) => (
+              <li key={result.id} className="p-4">
+                <h3 className="text-2xl font-semibold text-gray-700">
+                  {result.title}
+                </h3>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No results found</p>
+        )}
+      </div>
+      <div>
+        {confluenceData ? (
+          <ul className="space-y-4">
+            {confluenceData.map((result) => (
+              <li key={result.id} className="p-4 rounded-lg shadow-md">
+                <h3 className="text-2xl font-semibold text-gray-700 mb-1">
+                  {result.title}
+                </h3>
+                <p
+                  dangerouslySetInnerHTML={{ __html: result.innerHTML }}
+                  className="text-lg text-gray-500 leading-relaxed"
+                />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No results found</p>
+        )}
+      </div>
     </div>
   );
 }

@@ -22,25 +22,29 @@ export async function GET(req, res) {
     const data = await response.json();
     const pageContent = data.body.storage.value;
 
-    // Find all <h3> tags and keep only the text inside
-    const h3TextArray = pageContent.match(/<h3[^>]*>[\s\S]*?<\/h3>/g);
+    // Extract HTML blocks between <h3> and <hr />
+    const blockPattern = /<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*?)<hr \/>/g;
 
-    // Remove <h3> tags and keep only the text
-    const textWithoutH3 = h3TextArray.map((h3Tag) =>
-      h3Tag.replace(/<[^>]+>/g, "")
-    );
+    const formattedBlocks = [];
+    let match;
+    while ((match = blockPattern.exec(pageContent)) !== null) {
+      let titleWithStrong = match[1]; // Title with <strong> tag
+      const content = match[2]; // Extract the content between <h3> and <hr />
 
-    // Remove &rdquo; and &ldquo; from textWithoutH3
-    const cleanedText = textWithoutH3.map((text) =>
-      text.replace(/&ldquo;|&rdquo;/g, "")
-    );
+      // Remove <strong> tags and get only the text from the title
+      titleWithStrong = titleWithStrong.replace(/<[^>]*>/g, "");
 
-    const cleanedTextObjects = cleanedText.map((text) => ({
-      id: uuidv4(),
-      text,
-    }));
+      // Remove &ldquo; and &rdquo; from the title
+      const title = titleWithStrong.replace(/&ldquo;|&rdquo;/g, "");
 
-    return NextResponse.json(cleanedTextObjects);
+      formattedBlocks.push({
+        id: uuidv4(),
+        title: title,
+        innerHTML: content,
+      });
+    }
+
+    return NextResponse.json(formattedBlocks);
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.status(500).json({ error: error.message });
