@@ -34,6 +34,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Accessing Confluence
 
 On atlassian, go to manage account, security and there you will be able to create an API key.
-Remove the example from example .env.local and store your API key here alongside your email
+Remove the example from example.env.local -> ".env.local" and store your API key here alongside your email
 
 [Confluence API Documentation](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/)
