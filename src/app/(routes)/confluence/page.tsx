@@ -106,23 +106,27 @@ function ConfluencePage() {
         {searchQuery ? (
           <ul className="w-full">
             {sortedData.slice(0, 20).map((result) => (
-              <h3
-                className="text-2xl font-semibold text-gray-700 mb-1 cursor-pointer hover:text-gray-500"
-                onClick={() => handleResultClick(result)}
-              >
-                {result.title}
-              </h3>
+              <li key={result.id} className="py-2 px-4">
+                <h3
+                  className="text-2xl font-semibold text-gray-700 mb-1 cursor-pointer hover:text-gray-500"
+                  onClick={() => handleResultClick(result)}
+                >
+                  {result.title}
+                </h3>
+              </li>
             ))}
           </ul>
         ) : (
           <ul className="w-full">
             {sortedData.map((result) => (
-              <h3
-                className="text-2xl font-semibold text-gray-700 mb-1 cursor-pointer hover:text-gray-500"
-                onClick={() => handleResultClick(result)}
-              >
-                {result.title}
-              </h3>
+              <li key={result.id} className="py-2 px-4">
+                <h3
+                  className="text-2xl font-semibold text-gray-700 mb-1 cursor-pointer hover:text-gray-500"
+                  onClick={() => handleResultClick(result)}
+                >
+                  {result.title}
+                </h3>
+              </li>
             ))}
           </ul>
         )}
