@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
-import { Input } from "@/components/ui/input";
+
 import Link from "next/link";
 
+import { Link as ThemedLink } from "@radix-ui/themes";
+import SearchHeader from "@/components/ui/SearchHeader/SearchHeader";
 interface Result {
   id: string;
   term: string;
@@ -32,19 +34,11 @@ export default function Home() {
 
   return (
     <main className="flex-col text-center">
-      <Link href="/confluence">Confluence Data here</Link>
-      <div className="grid w-full items-center gap-1.5 p-10">
-        <div className="max-w-2xl mx-auto">
-          <Input
-            className="w-full"
-            type="text"
-            onChange={(e) => {
-              setSeachTerm(e.target.value);
-            }}
-            value={searchTerm}
-          />
-        </div>
-      </div>
+      <SearchHeader onSearch={setSeachTerm} />
+
+      <Link href="/confluence">
+        <ThemedLink underline="always">Confluence Data here</ThemedLink>
+      </Link>
 
       <div className="grid w-full items-center gap-1.5">
         {searchTerm && <p>Showing results for {searchTerm}</p>}
