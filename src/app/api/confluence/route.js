@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid";
 
 export async function GET(req, res) {
   try {
@@ -38,7 +37,6 @@ export async function GET(req, res) {
       const title = titleWithStrong.replace(/&ldquo;|&rdquo;/g, "");
 
       formattedBlocks.push({
-        id: uuidv4(),
         title: title,
         innerHTML: content,
       });
