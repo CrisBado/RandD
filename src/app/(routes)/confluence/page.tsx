@@ -4,7 +4,7 @@ import useDebounce from "@/app/hooks/useDebounce";
 import React, { useState, useEffect } from "react";
 
 interface ConfluenceResult {
-  id: string;
+  _id: string;
   title: string;
   innerHTML: string;
 }
@@ -27,7 +27,7 @@ function ConfluencePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/confluence");
+        const response = await fetch("/api/mongodb");
         if (response.ok) {
           const data = await response.json();
           setConfluenceData(data);
@@ -75,7 +75,7 @@ function ConfluencePage() {
       <div>
         {result ? (
           <ul className="w-full">
-            <li key={result.id} className="p-4">
+            <li key={result._id} className="p-4">
               <h3 className="text-2xl font-semibold text-gray-700 mb-1">
                 {result.title}
               </h3>
@@ -106,7 +106,7 @@ function ConfluencePage() {
         {searchQuery ? (
           <ul className="w-full">
             {sortedData.slice(0, 20).map((result) => (
-              <li key={result.id} className="py-2 px-4">
+              <li key={result._id} className="py-2 px-4">
                 <h3
                   className="text-2xl font-semibold text-gray-700 mb-1 cursor-pointer hover:text-gray-500"
                   onClick={() => handleResultClick(result)}
@@ -119,7 +119,7 @@ function ConfluencePage() {
         ) : (
           <ul className="w-full">
             {sortedData.map((result) => (
-              <li key={result.id} className="py-2 px-4">
+              <li key={result._id} className="py-2 px-4">
                 <h3
                   className="text-2xl font-semibold text-gray-700 mb-1 cursor-pointer hover:text-gray-500"
                   onClick={() => handleResultClick(result)}
