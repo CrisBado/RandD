@@ -46,15 +46,15 @@ export default function SearchHeader({
           <Input
             placeholder="e.g. PNC, or Launchpad"
             type="text"
-            onChange={(e) => {
-              setSeachTerm(e.target.value);
-            }}
+            onChange={setSeachTerm}
             value={searchTerm}
+            withClearButton
           />
         </label>
+
         <ul className="flex gap-2">
           {filters.map((filter) => (
-            <li>
+            <li key={filter}>
               <Badge radius="full" color="indigo" size="2">
                 {filter}
               </Badge>

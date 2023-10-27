@@ -5,7 +5,6 @@ import useDebounce from "../hooks/useDebounce";
 
 import Link from "next/link";
 
-import { Link as ThemedLink } from "@radix-ui/themes";
 import SearchHeader from "@/components/ui/SearchHeader/SearchHeader";
 interface Result {
   id: string;
@@ -32,29 +31,39 @@ export default function Home() {
     }
   }, [debouncedSearchTerm]);
 
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   return (
-    <main className="flex-col text-center">
+    <main className="flex flex-col gap-8">
+      <Link href="/confluence">Confluence Data here</Link>
+
       <SearchHeader onSearch={setSeachTerm} />
 
-      <Link href="/confluence">
-        <ThemedLink underline="always">Confluence Data here</ThemedLink>
-      </Link>
-
-      <div className="grid w-full items-center gap-1.5">
-        {searchTerm && <p>Showing results for {searchTerm}</p>}
-
-        {results && results.length > 0 ? (
-          <ul>
-            {results.map((result) => (
-              <li key={result.id}>
-                {result.term}
-                {result.description}
+      <div className="max-w-4xl w-full mx-auto">
+        <div className="flex gap-4">
+          <ul className="font-medium text-center">
+            {alphabet.map((letter) => (
+              <li key={letter}>
+                <Link href={`#${letter}`}>{letter}</Link>
               </li>
             ))}
           </ul>
-        ) : (
-          <p>No results found</p>
-        )}
+          <div className="grid w-full items-center gap-1.5">
+            {results && results.length > 0 ? (
+              <ul>
+                {results.map((result) => (
+                  <li key={result.id}>
+                    {result.term}
+                    {result.description}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="p-10 text-center">
+                <p>No results found</p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </main>
   );
