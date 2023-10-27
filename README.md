@@ -37,3 +37,7 @@ On atlassian, go to manage account, security and there you will be able to creat
 Remove the example from example.env.local -> ".env.local" and store your API key here alongside your email
 
 [Confluence API Documentation](https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/)
+
+## Accessing MongoDB
+
+You'll need to request access for the URI string, once you have it, replace the string in your .env.local file
