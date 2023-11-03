@@ -56,8 +56,6 @@ export async function GET(req, res) {
       });
     });
 
-    console.log("Formatted blocks:", formattedBlocks);
-
     return NextResponse.json(formattedBlocks);
   } catch (error) {
     console.error("Error:", error);
