@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import cheerio from "cheerio";
 
 export async function GET(req, res) {
   try {
@@ -10,37 +11,50 @@ export async function GET(req, res) {
     const authString = `${email}:${apiToken}`;
     const encodedAuthString = btoa(authString);
 
-    const response = await fetch(confluenceApiUrl, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${encodedAuthString}`,
-      },
-    });
+    // Function to fetch the page content and handle pagination
+    async function fetchPageContent(url, content = "") {
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Basic ${encodedAuthString}`,
+        },
+      });
 
-    // Extract the HTML content from the response
-    const data = await response.json();
-    const pageContent = data.body.storage.value;
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch page content: ${response.status} - ${response.statusText}`
+        );
+      }
 
-    // Extract HTML blocks between <h3> and <hr />
-    const blockPattern = /<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*?)<hr \/>/g;
+      const data = await response.json();
+      const pageContent = data.body.storage.value;
+
+      content += pageContent;
+
+      if (data._links && data._links.next) {
+        return fetchPageContent(data._links.next, content);
+      } else {
+        return content;
+      }
+    }
+
+    // Fetch the page content and handle pagination
+    const completePageContent = await fetchPageContent(confluenceApiUrl);
 
     const formattedBlocks = [];
-    let match;
-    while ((match = blockPattern.exec(pageContent)) !== null) {
-      let titleWithStrong = match[1]; // Title with <strong> tag
-      const content = match[2]; // Extract the content between <h3> and <hr />
+    const $ = cheerio.load(completePageContent);
 
-      // Remove <strong> tags and get only the text from the title
-      titleWithStrong = titleWithStrong.replace(/<[^>]*>/g, "");
+    $("h3").each((index, element) => {
+      const titleWithStrong = $(element).text();
+      const content = $(element).nextUntil("h3").html();
 
-      // Remove &ldquo; and &rdquo; from the title
       const title = titleWithStrong.replace(/&ldquo;|&rdquo;/g, "");
 
       formattedBlocks.push({
         title: title,
         innerHTML: content,
       });
-    }
+    });
 
     return NextResponse.json(formattedBlocks);
   } catch (error) {
