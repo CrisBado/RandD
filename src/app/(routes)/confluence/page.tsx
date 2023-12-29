@@ -2,7 +2,7 @@
 
 import useDebounce from "@/app/hooks/useDebounce";
 import React, { useState, useEffect } from "react";
-
+import MarkdownEditor from '@uiw/react-markdown-editor';
 interface ConfluenceResult {
   _id: string;
   title: string;
@@ -71,9 +71,12 @@ function ConfluencePage() {
 
   // Render the selected result
   function SelectedResultDetails({ result }: { result: ConfluenceResult }) {
+    const [markdown, setMarkdown] = useState(result.innerHTML);
+
     return (
       <div>
         {result ? (
+          <>
           <ul className="w-full">
             <li key={result._id} className="p-4">
               <h3 className="text-2xl font-semibold text-gray-700 mb-1">
@@ -85,6 +88,14 @@ function ConfluencePage() {
               />
             </li>
           </ul>
+             <MarkdownEditor
+             value={markdown}
+             height="200px"
+             onChange={(value, viewUpdate) => setMarkdown(value)}
+             enableScroll={false}
+             className="w-[800px]"
+           />
+           </>
         ) : (
           <p>No results found</p>
         )}
@@ -93,8 +104,8 @@ function ConfluencePage() {
   }
 
   return (
-    <div className="flex">
-      <div className="basis-0">
+    <div className="grid grid-cols-3 gap-4">
+      <div className="">
         <input
           type="text"
           placeholder="Search by title"
@@ -131,7 +142,7 @@ function ConfluencePage() {
           </ul>
         )}
       </div>
-      <div className="pt-10 flex justify-center w-full">
+      <div className="col-span-2 pt-10  justify-center">
         {selectedResult ? (
           <SelectedResultDetails result={selectedResult} />
         ) : (
